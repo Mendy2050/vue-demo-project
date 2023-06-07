@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>添加品牌</title>
+</head>
+<body>
+
+<!--2. add a div and the id-->
+<div id="app">
+
+    <h3>添加品牌</h3>
+    <form action="" method="post">
+        品牌名称：<input id="brandName" v-model="brand.brandName" name="brandName"><br>
+        企业名称：<input id="companyName" v-model="brand.companyName"  name="companyName"><br>
+        排序：<input id="ordered" v-model="brand.ordered"  name="ordered" ><br>
+        描述信息：<textarea rows="5" cols="20" id="description" v-model="brand.description"  name="description"></textarea><br>
+        状态：
+        <input type="radio" v-model="brand.status"  name="status" value="0">禁用
+        <input type="radio" v-model="brand.status"  name="status" value="1">启用<br>
+
+        <!--4. add onclick event, @click -->
+        <input type="button" id="btn" @click="submitForm"  value="提交">
+    </form>
+
+
+    <!--1. introduce the js-->
+    <script src="./js/axios-0.18.0.js"></script>
+    <script src="./js/vue.js"></script>
+
+    <!--3. write the Vue core part-->
+    <script>
+        new Vue({
+            el: "#app",
+            data(){
+                return{
+                    brand:{}
+                }
+            },
+            methods:{
+                submitForm(){
+                    //5. send out ajax request,realize the function of addition
+                    var _this = this;
+
+                    axios({
+                        method:"post",
+                        url:"http://localhost:8080/vue-demo/addServlet",
+                        data: _this.brand
+                    }).then(function (resp) {
+                        //3. check if the response data is the "success"
+                        if(resp.data == "success"){
+                            location.href = "http://localhost:8080/vue-demo/brand.html"
+                        }
+                    })
+
+
+                }
+            }
+        })
+    </script>
+
+
+    <!--<script>
+        //1. bind the button with click event
+        document.getElementById("btn").onclick = function () {
+            //1.0 acquire the real data (from the input) -js object
+            //1.1 set up a js object - formData
+            var formData = {
+                brandName: "",
+                companyName: "",
+                ordered: "",
+                description: "",
+                status: ""
+            };
+
+            //1.2 acquire the input form data
+            //1.3 set the value of [[js object - formData]] with the input form data
+            let brandName = document.getElementById("brandName").value;
+            formData.brandName = brandName;
+
+            let companyName = document.getElementById("companyName").value;
+            formData.companyName = companyName;
+
+            let ordered = document.getElementById("ordered").value;
+            formData.ordered = ordered;
+
+            let description = document.getElementById("description").value;
+            formData.description = description;
+
+            let status = document.getElementsByName("status");
+            for (let i = 0; i < status.length; i++) {
+                if(status[i].checked){
+                    formData.status = status[i].value;
+                };
+            }
+
+            console.log(formData);
+
+
+            //2. send out ajax request
+            axios({
+                method:"post",
+                url:"http://localhost:8080/JSON-demo/addServlet",
+                data: formData
+            }).then(function (resp) {
+                //3. check if the response data is the "success"
+                if(resp.data == "success"){
+                    location.href = "http://localhost:8080/JSON-demo/brand.html"
+                }
+            })
+        }
+
+
+    </script>-->
+
+</body>
+</html>

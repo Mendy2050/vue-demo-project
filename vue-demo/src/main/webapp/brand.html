@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+
+
+<!--2. add a div and the id-->
+<div id="app">
+
+    <a href="addBrand.html"><input type="button" value="新增"></a><br>
+    <hr>
+    <table id="brandTable" border="1" cellspacing="0" width="100%">
+        <tr>
+            <th>序号</th>
+            <th>品牌名称</th>
+            <th>企业名称</th>
+            <th>排序</th>
+            <th>品牌介绍</th>
+            <th>状态</th>
+            <th>操作</th>
+        </tr>
+
+         <!-- 4. use v-for to iterate all the tr -->
+        <tr  v-for="(brand,i) in brands"  align="center">
+            <td>{{i+1}}</td>
+            <td>{{brand.brandName}}</td>
+            <td>{{brand.companyName}}</td>
+            <td>{{brand.odered}}</td>
+            <td>{{brand.description}}</td>
+            <td>{{brand.statusStr}}</td>
+            <td><a href="#">修改</a> <a href="#">删除</a></td>
+        </tr>
+
+
+    </table>
+</div>
+
+
+
+
+<!--1. introduce the js-->
+<script src="./js/axios-0.18.0.js"></script>
+<script src="./js/vue.js"></script>
+
+<!--3. write the Vue core part-->
+<script>
+    new Vue({
+        el: "#app",
+        data(){
+            return{
+                brands:[]
+            }
+        },
+        mounted(){
+            //after the page is loaded, send out asynchronous request to search data
+            var _this = this;
+
+            axios({
+                method:"get",
+                url:"http://localhost:8080/vue-demo/selectAllServlet"
+            }).then(function (resp) {
+                console.log(resp.data);
+                _this.brands = resp.data;
+            })
+        }
+    })
+</script>
+
+<!--<script>
+    //1. When the page finishes loading, send out the corresponding ajax request
+    window.onload = function () {
+        //2. use axios to send out ajax request
+        axios({
+            method:"get",
+            url:"http://localhost:8080/JSON-demo/selectAllServlet"
+        }).then(function (resp) {
+            //acquire data
+            let brands = resp.data;
+            let tableData = " <tr>\n" +
+                "        <th>序号</th>\n" +
+                "        <th>品牌名称</th>\n" +
+                "        <th>企业名称</th>\n" +
+                "        <th>排序</th>\n" +
+                "        <th>品牌介绍</th>\n" +
+                "        <th>状态</th>\n" +
+                "        <th>操作</th>\n" +
+                "    </tr>";
+
+            for (let i = 0; i < brands.length; i++) {
+                let brand = brands[i];
+
+                tableData += " <tr align=\"center\">\n" +
+                    "        <td>"+(i+1)+"</td>\n" +
+                    "        <td>"+brand.brandName+"</td>\n" +
+                    "        <td>"+brand.companyName+"</td>\n" +
+                    "        <td>"+brand.ordered+"</td>\n" +
+                    "        <td>"+brand.description+"</td>\n" +
+                    "        <td>"+brand.status+"</td>\n" +
+                    "\n" +
+                    "        <td><a href=\"#\">修改</a> <a href=\"#\">删除</a></td>\n" +
+                    "    </tr>"
+            }
+
+            // set the data of the table
+            document.getElementById("brandTable").innerHTML = tableData;
+
+        })
+    }
+</script>-->
+
+
+</body>
+</html>
